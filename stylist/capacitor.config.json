@@ -1,0 +1,13 @@
+{
+  "appId": "me.salal.stylist",
+  "appName": "Stylist",
+  "webDir": "www",
+  "server": {
+    "url": "https://stylist-4g4.pages.dev",
+    "cleartext": false
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#F1F4EF"
+  }
+}

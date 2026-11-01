@@ -1,0 +1,54 @@
+workflows:
+  stylist-unsigned:
+    name: Stylist shell (unsigned IPA for AltStore)
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      node: 22
+      xcode: latest
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+      cancel_previous_builds: true
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          cd stylist
+          npm ci
+      - name: Sync Capacitor into the iOS project
+        script: |
+          cd stylist
+          npx cap sync ios
+      - name: Build unsigned release app
+        script: |
+          cd stylist/ios/App
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$CM_BUILD_DIR/stylist/build" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Package as IPA
+        script: |
+          cd "$CM_BUILD_DIR/stylist/build/Build/Products/Release-iphoneos"
+          rm -rf Payload && mkdir Payload
+          cp -R App.app Payload/
+          zip -qr "$CM_BUILD_DIR/Stylist.ipa" Payload
+          ls -la "$CM_BUILD_DIR/Stylist.ipa"
+    artifacts:
+      - Stylist.ipa
+    publishing:
+      email:
+        recipients:
+          - salal.nasir@gmail.com
+        notify:
+          success: true
+          failure: true

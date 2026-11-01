@@ -1,0 +1,22 @@
+{
+  "name": "stylist-shell",
+  "version": "1.0.0",
+  "description": "Capacitor iOS shell for the Stylist PWA",
+  "main": "index.js",
+  "scripts": {
+    "sync": "cap sync ios",
+    "assets": "capacitor-assets generate --ios --iconBackgroundColor \"#354F52\" --splashBackgroundColor \"#F1F4EF\" --splashBackgroundColorDark \"#F1F4EF\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/ios": "^8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0"
+  },
+  "private": true
+}
