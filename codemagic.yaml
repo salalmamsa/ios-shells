@@ -1,11 +1,17 @@
 workflows:
-  stylist-unsigned:
-    name: Stylist shell (unsigned IPA for AltStore)
+  stylist-testflight:
+    name: Stylist shell (signed, TestFlight internal)
     instance_type: mac_mini_m2
     max_build_duration: 30
+    integrations:
+      app_store_connect: Salal ASC
     environment:
       node: 22
       xcode: latest
+      groups:
+        - apple_signing        # holds CERTIFICATE_PRIVATE_KEY
+      vars:
+        BUNDLE_ID: me.salal.stylist
     triggering:
       events:
         - push
@@ -13,6 +19,58 @@ workflows:
         - pattern: main
           include: true
       cancel_previous_builds: true
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          cd stylist
+          npm ci
+      - name: Sync Capacitor into the iOS project
+        script: |
+          cd stylist
+          npx cap sync ios
+      - name: Fetch or create signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY \
+            --create
+          keychain initialize
+          keychain add-certificates
+          xcode-project use-profiles --project stylist/ios/App/App.xcodeproj
+      - name: Set build number
+        script: |
+          # Codemagic's BUILD_NUMBER increments per build, so TestFlight never sees a duplicate.
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/g" \
+            stylist/ios/App/App.xcodeproj/project.pbxproj
+          grep -m1 CURRENT_PROJECT_VERSION stylist/ios/App/App.xcodeproj/project.pbxproj
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --project stylist/ios/App/App.xcodeproj \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - salal.nasir@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        # Internal testing only. No beta review, no external groups, no public link.
+        submit_to_testflight: false
+        submit_to_app_store: false
+
+  stylist-unsigned:
+    name: Stylist shell (unsigned IPA for AltStore, manual only)
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      node: 22
+      xcode: latest
     scripts:
       - name: Install npm dependencies
         script: |
@@ -42,13 +100,5 @@ workflows:
           rm -rf Payload && mkdir Payload
           cp -R App.app Payload/
           zip -qr "$CM_BUILD_DIR/Stylist.ipa" Payload
-          ls -la "$CM_BUILD_DIR/Stylist.ipa"
     artifacts:
       - Stylist.ipa
-    publishing:
-      email:
-        recipients:
-          - salal.nasir@gmail.com
-        notify:
-          success: true
-          failure: true

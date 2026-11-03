@@ -9,7 +9,12 @@ Thin Capacitor shells for Salal's PWAs. Each shell loads the live site over HTTP
 
 ## Build
 
-`codemagic.yaml` builds an unsigned IPA on every push to `main`. Download `Stylist.ipa` from the Codemagic build artifacts and sideload it with AltStore (free Apple ID) or install it through TestFlight once a paid developer account exists.
+`codemagic.yaml` has two workflows:
+
+- `stylist-testflight` runs on every push to `main`. It signs with the App Store Connect API key (Codemagic integration `Salal ASC`) and the certificate key in the `apple_signing` group, then uploads to TestFlight for **internal testing only**. No beta review, no external testers, no public link, no App Store submission.
+- `stylist-unsigned` is manual only. It produces an unsigned `Stylist.ipa` for AltStore and is kept as a fallback.
+
+`ITSAppUsesNonExemptEncryption = false` is set in `Info.plist` so TestFlight doesn't ask the export compliance question on every build.
 
 ## Rebuild when
 
