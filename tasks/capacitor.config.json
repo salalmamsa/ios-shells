@@ -1,0 +1,13 @@
+{
+  "appId": "me.salal.tasks",
+  "appName": "Tasks",
+  "webDir": "www",
+  "server": {
+    "url": "https://salal.me",
+    "cleartext": false
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#0587B8"
+  }
+}

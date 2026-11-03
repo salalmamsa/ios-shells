@@ -1,0 +1,22 @@
+{
+  "name": "tasks-shell",
+  "version": "1.0.0",
+  "description": "Capacitor iOS shell for the salal.me task manager",
+  "main": "index.js",
+  "scripts": {
+    "sync": "cap sync ios",
+    "assets": "capacitor-assets generate --ios --iconBackgroundColor \"#0587B8\" --splashBackgroundColor \"#0587B8\" --splashBackgroundColorDark \"#06263A\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/ios": "^8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0"
+  },
+  "private": true
+}

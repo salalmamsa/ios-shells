@@ -5,13 +5,14 @@ Thin Capacitor shells for Salal's PWAs. Each shell loads the live site over HTTP
 | Folder | App | Loads | Bundle ID |
 |---|---|---|---|
 | `stylist/` | Stylist | https://stylist-4g4.pages.dev | me.salal.stylist |
-| `tasks/` | Tasks (later) | https://salal.me | me.salal.tasks |
+| `tasks/` | Tasks | https://salal.me | me.salal.tasks |
 
 ## Build
 
 `codemagic.yaml` has two workflows:
 
 - `stylist-testflight` runs on every push to `main`. It signs with the App Store Connect API key (Codemagic integration `Salal ASC`) and the certificate key in the `apple_signing` group, then uploads to TestFlight for **internal testing only**. No beta review, no external testers, no public link, no App Store submission.
+- `tasks-testflight` is the same for Tasks, manual only for now. Push notifications do not work inside the shell yet (Web Push is not supported in WKWebView), so the 8 AM and 3 PM nudges still need the Home Screen web app until APNs is added.
 - `stylist-unsigned` is manual only. It produces an unsigned `Stylist.ipa` for AltStore and is kept as a fallback.
 
 `ITSAppUsesNonExemptEncryption = false` is set in `Info.plist` so TestFlight doesn't ask the export compliance question on every build.
@@ -30,3 +31,7 @@ Nothing else. The site is the app.
 - `stylist/www/index.html` is a placeholder. It is only shown if the shell cannot reach the site.
 - `WKAppBoundDomains` in `stylist/ios/App/App/Info.plist` must list the site domain or service workers will not run inside the shell.
 - Placeholder icon and splash live in `stylist/assets/`. Replace `icon.png` (1024x1024) and `splash.png` (2732x2732), then run `npx capacitor-assets generate --ios` inside `stylist/`.
+
+## Tasks colours
+
+Native parts follow the Sky palette from taskmanager `ebc68d7`: background and light splash `#0587B8`, dark splash `#06263A`, icon gradient `#0593C6` to `#06374A` with the existing white T.
