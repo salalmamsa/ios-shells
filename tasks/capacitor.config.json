@@ -9,5 +9,12 @@
   "ios": {
     "contentInset": "automatic",
     "backgroundColor": "#0587B8"
+  },
+  "plugins": {
+    "Keyboard": {
+      "resize": "native",
+      "resizeOnFullScreen": true,
+      "style": "DEFAULT"
+    }
   }
 }
