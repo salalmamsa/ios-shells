@@ -28,6 +28,14 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Tasks uses the camera when you attach a photo, such as a receipt.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Tasks lets you attach photos from your library.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Tasks can save images to your photo library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Only used if you record a video to attach.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

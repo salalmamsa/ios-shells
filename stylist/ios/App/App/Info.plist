@@ -28,6 +28,14 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Stylist uses the camera to photograph clothes for your wardrobe.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Stylist lets you pick clothing photos from your library.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Stylist can save outfit images to your photo library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Only used if you record a video while adding an item.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
